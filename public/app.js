@@ -6,6 +6,10 @@ const toastMsg = document.querySelector(".toastMsg");
 
 const API_URL = window.location.origin;
 
+function scrollToBottom() {
+    taskContainer.scrollTop = taskContainer.scrollHeight;
+}
+
 // LOAD TODO
 async function loadTodos() {
     const options = {
@@ -119,6 +123,7 @@ async function showTodos() {
             taskDiv.querySelector(".uTask").style.textDecoration = "line-through";
         }
     });
+    scrollToBottom();
 }
 
 function showToast(message) {
@@ -146,7 +151,7 @@ taskContainer.addEventListener("click", async (e) => {
             taskDiv.classList.add("taskDelete");
             setTimeout(() => {
                 showTodos();
-            }, 400)
+            }, 300)
             showToast("Task Deleted"); 
             return;
         }
