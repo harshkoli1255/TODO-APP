@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Task</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="assets/app_icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <div class="todo_app">
+            <span id="app_name">Canvas Task</span>
+            <img src="assets/app_icon.png" alt="App Icon" id="app_icon">
+        </div>
+        <div class="add_todo">
+            <div class="input_container">
+                <input type="text" placeholder="Enter Task" id="task" spellcheck="false">
+            </div>
+            <div class="button_container">
+                <i class="fa-solid fa-plus" id="addTask"></i>
+            </div>
+        </div>
+        <div class="tasks_container">
+            <div class="todoImgContainer">
+                <img src="assets/todolistIcon.png" class="todoListImage">
+            </div>
+        
+            <!-- <div class="task">
+                <div class="userTask">
+                    <i class="fa-duotone fa-solid fa-grip-lines-vertical grap_icon"></i>
+                    <span class="uTask">This is sample task</span>
+                </div>
+                <div class="funtion_buttons">
+                    <div class="edit_button">
+                        <i class="fa-duotone fa-solid fa-pen-to-square editTask"></i>
+                    </div>
+                    <div class="delete_button">
+                        <i class="fa-solid fa-xmark deleteTask"></i>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="toastMsg">
+        <span>Task Completed</span>
+    </div>
+    
+    
+    <script src="app.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>
