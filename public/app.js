@@ -123,7 +123,6 @@ async function showTodos() {
             taskDiv.querySelector(".uTask").style.textDecoration = "line-through";
         }
     });
-    scrollToBottom();
 }
 
 function showToast(message) {
@@ -210,6 +209,7 @@ addTaskButton.addEventListener("click", async () => {
             inputBox.value = "";
             showTodos();
             delete inputBox.dataset.editId;
+            scrollToBottom();
         }
     }
     
