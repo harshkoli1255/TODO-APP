@@ -4,14 +4,18 @@ const addTaskButton = document.querySelector(".button_container");
 const todoImg = document.querySelector(".todoImgContainer");
 const toastMsg = document.querySelector(".toastMsg");
 
+const API_URL = window.location.origin;
+
 // LOAD TODO
 async function loadTodos() {
-    let res = await fetch("http://localhost:80/findtask");
-    let data = await res.json();
-    allTodos = data;
-    return allTodos;
+    const options = {
+        headers : {
+            "Content-Type" : "application/json; charset=utf-8",
+        }
+    }
+    let res = await axios.get(`${API_URL}/findtask`,options);
+    return res.data;
 }
-
 // DELETE TASK
 async function deleteTask(taskID) {
     let data = {
@@ -22,7 +26,8 @@ async function deleteTask(taskID) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
-    let res = axios.post("http://localhost:80/deletetask", data, options);
+    let res = axios.post(`${API_URL}/deletetask`, data, options);
+    return res;
 }
 
 
@@ -37,7 +42,8 @@ async function updateTask(userid, updatetask) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
-    let res = axios.post("http://localhost:80/updatetask", data, options);
+    let res = axios.post(`${API_URL}/updatetask`, data, options);
+    return res;
 }
 
 
@@ -51,7 +57,8 @@ async function addUserTask(usertasks) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
-    let res = axios.post("http://localhost:80/addtask", data, options);
+    let res = axios.post(`${API_URL}/addtask`, data, options);
+    return res;
 }
 
 async function taskCompleted(usertaskid) {
@@ -63,7 +70,8 @@ async function taskCompleted(usertaskid) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
-    let res = axios.post("http://localhost:80/taskcomplete", data, options);
+    let res = axios.post(`${API_URL}/taskcomplete`, data, options);
+    return res;
 }
 async function taskInCompleted(usertaskid) {
     let data = {
@@ -74,7 +82,8 @@ async function taskInCompleted(usertaskid) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     }
-    let res = axios.post("http://localhost:80/taskincomplete", data, options);
+    let res = axios.post(`${API_URL}/taskincomplete`, data, options);
+    return res;
 }
  
 // SHOW TODOS
@@ -110,7 +119,6 @@ async function showTodos() {
             taskDiv.querySelector(".uTask").style.textDecoration = "line-through";
         }
     });
-    
 }
 
 function showToast(message) {
@@ -133,10 +141,15 @@ taskContainer.addEventListener("click", async (e) => {
 
     // DELETE
     if(e.target.closest(".delete_button")) {
-        taskDiv.classList.add("taskDelete");
-        showToast("Task Deleted"); 
-        await deleteTask(taskId);
-        showTodos();
+        let deleteTaskRes = await deleteTask(taskId);
+        if(deleteTaskRes.status == 200) {
+            taskDiv.classList.add("taskDelete");
+            setTimeout(() => {
+                showTodos();
+            }, 400)
+            showToast("Task Deleted"); 
+            return;
+        }
     }
 
     // EDIT
@@ -151,17 +164,20 @@ taskContainer.addEventListener("click", async (e) => {
         for(todo of alltodos) {
             if(todo.id == taskId) {
                 if(todo.status == false) {
-                    showToast("Task Completed");
-                    taskCompleted(taskId)
-                    showTodos();
-
-                    return;
+                    let taskCompleteRes = await taskCompleted(taskId);
+                    if(taskCompleteRes.status == 200) {
+                        showToast("Task Completed");
+                        showTodos();
+                        return;
+                    }
                 }
                 else if(todo.status == true) {
-                    showToast("Task In-Complete");
-                    taskInCompleted(taskId)
-                    showTodos();
-                    return;
+                    let taskInCompleteRes = await taskInCompleted(taskId);
+                    if(taskInCompleteRes.status == 200) {
+                        showToast("Task In-Complete");
+                        showTodos();
+                        return;
+                    }
                 }
             }
         }
@@ -174,15 +190,24 @@ addTaskButton.addEventListener("click", async () => {
     addTaskButton.innerHTML = `<i class="fa-solid fa-plus" id="addTask"></i>`;
     const editId = inputBox.dataset.editId;
     if (editId) {
-        showToast("Task Updated");
-        await updateTask(editId, value);
-    } else {
-        showToast("Task Added");
-        await addUserTask(value);
+        let updateTaskRes = await updateTask(editId, value);
+        if(updateTaskRes.status == 200) {
+            showToast("Task Updated");
+            inputBox.value = "";
+            showTodos();
+            delete inputBox.dataset.editId;
+        }
+    } 
+    else {
+        let addUserTaskRes = await addUserTask(value);
+        if(addUserTaskRes.status == 200) {
+            showToast("Task Added");
+            inputBox.value = "";
+            showTodos();
+            delete inputBox.dataset.editId;
+        }
     }
-    inputBox.value = "";
-    showTodos();
-    delete inputBox.dataset.editId;
+    
 });
 
 inputBox.addEventListener("keydown", (e) => {
