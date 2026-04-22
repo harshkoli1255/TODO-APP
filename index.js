@@ -54,9 +54,9 @@ app.post("/addtask", (req, res) => {
     let userAllTask = userTask.split(",").map(t => t.trim());
     // console.log(userAllTask);
     let userAllTakskLen = userAllTask.length;
-    let count = 0;
+    // let count = 0;
+    let isFound = false;
     userAllTask.forEach(tasks => {
-        let isFound = false;
         for(picktask of allTask) {
             if(picktask.task == tasks) {
                 isFound = true;
@@ -72,14 +72,20 @@ app.post("/addtask", (req, res) => {
             };
             allTask.push(newTask);
             saveTask();
-            count++;
+            // count++;
         }
     });
-    if(count == userAllTakskLen) {
-        res.send("All Tasks Added Successfully");
+    // if(count == userAllTakskLen) {
+    //     res.send("All Tasks Added Successfully");
+    // }
+    // else {
+    //     res.send(`${count} tasks added out of ${userAllTakskLen}`);
+    // }
+    if(isFound === true) {
+        res.sendStatus(202);
     }
-    else {
-        res.send(`${count} tasks added out of ${userAllTakskLen}`);
+    else if(isFound === false) {
+        res.sendStatus(200);
     }
 });
 

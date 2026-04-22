@@ -150,7 +150,7 @@ taskContainer.addEventListener("click", async (e) => {
             taskDiv.classList.add("taskDelete");
             setTimeout(() => {
                 showTodos();
-            }, 300)
+            }, 410)
             showToast("Task Deleted"); 
             return;
         }
@@ -211,6 +211,10 @@ addTaskButton.addEventListener("click", async () => {
             delete inputBox.dataset.editId;
             scrollToBottom();
         }
+        else if(addUserTaskRes.status == 202) {
+            showToast("Task Already Exists");
+        }
+        console.log(addUserTaskRes.status);
     }
     
 });
